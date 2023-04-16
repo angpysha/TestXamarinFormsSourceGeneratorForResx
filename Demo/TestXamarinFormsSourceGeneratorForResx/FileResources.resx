@@ -135,6 +135,9 @@
   <data name="OneMoreStringForMyTest" xml:space="preserve">
     <value>OneMoreStringForMyTest</value>
   </data>
+  <data name="Property444" xml:space="preserve">
+    <value>Property444Value</value>
+  </data>
   <data name="PropertyForTesting" xml:space="preserve">
     <value>valu for this property</value>
   </data>
