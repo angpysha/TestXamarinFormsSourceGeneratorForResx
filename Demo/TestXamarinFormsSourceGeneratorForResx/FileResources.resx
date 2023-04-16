@@ -132,6 +132,12 @@
   <data name="newStringValueFOrSomeField" xml:space="preserve">
     <value>This should be anew line for something test.</value>
   </data>
+  <data name="OneMoreStringForMyTest" xml:space="preserve">
+    <value>OneMoreStringForMyTest</value>
+  </data>
+  <data name="PropertyForTesting" xml:space="preserve">
+    <value>valu for this property</value>
+  </data>
   <data name="SomeNewString" xml:space="preserve">
     <value>TestStr</value>
   </data>
@@ -139,13 +145,16 @@
     <value>test value</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value>dsd1141444</value>
+    <value>dsd114</value>
   </data>
   <data name="String2" xml:space="preserve">
     <value>someAnother</value>
   </data>
   <data name="String3" xml:space="preserve">
     <value>Third447</value>
+  </data>
+  <data name="String4332332332233" xml:space="preserve">
+    <value>dadsfdfdfafsfas</value>
   </data>
   <data name="String5" xml:space="preserve">
     <value>rtrttr</value>

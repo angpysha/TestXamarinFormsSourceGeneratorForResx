@@ -41,8 +41,29 @@ internal class AndroidStringsGenerator
 
     private static string GetName(XElement element)
     {
-        string name = element.Attribute("name")!.Value.ToLower();
-        return Regex.Replace(name, "[^a-zA-Z0-9_]{1,1}", "_");
+        string name = element.Attribute("name")!.Value;
+
+        if (string.IsNullOrEmpty(name))
+        {
+            return string.Empty;
+        }
+
+        var sb = new StringBuilder();
+
+        for (var i = 0; i < name.Length; i++)
+        {
+            var c = name[i];
+            if (char.IsLetterOrDigit(c))
+            {
+                sb.Append(char.ToLowerInvariant(c));
+            }
+            else if (c == ' ')
+            {
+                sb.Append('_');
+            }
+        }
+
+        return sb.ToString();
     }
 
     private static string GetValue(XElement element)

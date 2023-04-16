@@ -19161,94 +19161,103 @@ namespace TestXamarinFormsSourceGeneratorForResx.Droid
 			public const int not_set = 2131624046;
 			
 			// aapt resource value: 0x7F0E006F
-			public const int overflow_tab_title = 2131624047;
+			public const int onemorestringformytest = 2131624047;
 			
 			// aapt resource value: 0x7F0E0070
-			public const int password_toggle_content_description = 2131624048;
+			public const int overflow_tab_title = 2131624048;
 			
 			// aapt resource value: 0x7F0E0071
-			public const int path_password_eye = 2131624049;
+			public const int password_toggle_content_description = 2131624049;
 			
 			// aapt resource value: 0x7F0E0072
-			public const int path_password_eye_mask_strike_through = 2131624050;
+			public const int path_password_eye = 2131624050;
 			
 			// aapt resource value: 0x7F0E0073
-			public const int path_password_eye_mask_visible = 2131624051;
+			public const int path_password_eye_mask_strike_through = 2131624051;
 			
 			// aapt resource value: 0x7F0E0074
-			public const int path_password_strike_through = 2131624052;
+			public const int path_password_eye_mask_visible = 2131624052;
 			
 			// aapt resource value: 0x7F0E0075
-			public const int preference_copied = 2131624053;
+			public const int path_password_strike_through = 2131624053;
 			
 			// aapt resource value: 0x7F0E0076
-			public const int search_menu_title = 2131624054;
+			public const int preference_copied = 2131624054;
 			
 			// aapt resource value: 0x7F0E0077
-			public const int somenewstring = 2131624055;
+			public const int propertyfortesting = 2131624055;
 			
 			// aapt resource value: 0x7F0E0078
-			public const int somenewstring1 = 2131624056;
+			public const int search_menu_title = 2131624056;
 			
 			// aapt resource value: 0x7F0E0079
-			public const int status_bar_notification_info_overflow = 2131624057;
+			public const int somenewstring = 2131624057;
 			
 			// aapt resource value: 0x7F0E007A
-			public const int string1 = 2131624058;
+			public const int somenewstring1 = 2131624058;
 			
 			// aapt resource value: 0x7F0E007B
-			public const int string2 = 2131624059;
+			public const int status_bar_notification_info_overflow = 2131624059;
 			
 			// aapt resource value: 0x7F0E007C
-			public const int string3 = 2131624060;
+			public const int string1 = 2131624060;
 			
 			// aapt resource value: 0x7F0E007D
-			public const int string5 = 2131624061;
+			public const int string2 = 2131624061;
 			
 			// aapt resource value: 0x7F0E007E
-			public const int string6 = 2131624062;
+			public const int string3 = 2131624062;
 			
 			// aapt resource value: 0x7F0E007F
-			public const int string644 = 2131624063;
+			public const int string4332332332233 = 2131624063;
 			
 			// aapt resource value: 0x7F0E0080
-			public const int string645 = 2131624064;
+			public const int string5 = 2131624064;
 			
 			// aapt resource value: 0x7F0E0081
-			public const int string6adfsfasd = 2131624065;
+			public const int string6 = 2131624065;
 			
 			// aapt resource value: 0x7F0E0082
-			public const int string6rer = 2131624066;
+			public const int string644 = 2131624066;
 			
 			// aapt resource value: 0x7F0E0083
-			public const int string7eretere = 2131624067;
+			public const int string645 = 2131624067;
 			
 			// aapt resource value: 0x7F0E0084
-			public const int string7ewwe = 2131624068;
+			public const int string6adfsfasd = 2131624068;
 			
 			// aapt resource value: 0x7F0E0085
-			public const int string7fasdadsf = 2131624069;
+			public const int string6rer = 2131624069;
 			
 			// aapt resource value: 0x7F0E0086
-			public const int string7teere = 2131624070;
+			public const int string7eretere = 2131624070;
 			
 			// aapt resource value: 0x7F0E0087
-			public const int stringeeeeee = 2131624071;
+			public const int string7ewwe = 2131624071;
 			
 			// aapt resource value: 0x7F0E0088
-			public const int summary_collapsed_preference_list = 2131624072;
+			public const int string7fasdadsf = 2131624072;
 			
 			// aapt resource value: 0x7F0E0089
-			public const int tesststr = 2131624073;
+			public const int string7teere = 2131624073;
 			
 			// aapt resource value: 0x7F0E008A
-			public const int teststringforsome = 2131624074;
+			public const int stringeeeeee = 2131624074;
 			
 			// aapt resource value: 0x7F0E008B
-			public const int v7_preference_off = 2131624075;
+			public const int summary_collapsed_preference_list = 2131624075;
 			
 			// aapt resource value: 0x7F0E008C
-			public const int v7_preference_on = 2131624076;
+			public const int tesststr = 2131624076;
+			
+			// aapt resource value: 0x7F0E008D
+			public const int teststringforsome = 2131624077;
+			
+			// aapt resource value: 0x7F0E008E
+			public const int v7_preference_off = 2131624078;
+			
+			// aapt resource value: 0x7F0E008F
+			public const int v7_preference_on = 2131624079;
 			
 			static String()
 			{

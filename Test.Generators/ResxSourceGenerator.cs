@@ -14,137 +14,89 @@ public class ResxSourceGenerator : IIncrementalGenerator
         //             }
         // #endif
 
-        var resxFiles = context.AdditionalTextsProvider.Where(static atp => atp.Path.Contains("resx"));
+        var resxFiles = context.AdditionalTextsProvider
+            .Where(static atp => atp.Path.Contains("resx"))
+            .Collect();
 
-        var resxFilesCollected = resxFiles.Collect();
-        var compilationAdResx = context.CompilationProvider.Combine(resxFilesCollected);
-        var compilationResAndAnalyzer = context.AnalyzerConfigOptionsProvider.Combine(compilationAdResx);
+        var resxFilesPlusCompilation = context.CompilationProvider.Combine(resxFiles);
+        var resxFilesPlusCompilationPlusAnalyzerConfigOptions = context.AnalyzerConfigOptionsProvider.Combine(resxFilesPlusCompilation);
 
-        var incrementalContainer = compilationResAndAnalyzer
+        var incrementalContainer = resxFilesPlusCompilationPlusAnalyzerConfigOptions
             .Select((tuple, _) => new IncrementalValueProviderContainer(
                 AnalyzerConfigOptionsProvider: tuple.Left,
                 Compilation: tuple.Right.Left,
                 AdditionalTexts: tuple.Right.Right));
 
-        context.RegisterSourceOutput(compilationResAndAnalyzer, (sourceProductionContext, source) =>
+        context.RegisterSourceOutput(incrementalContainer, (sourceProductionContext, valueProviderContainer) =>
         {
-            if (source.Right.Right.LastOrDefault() is null)
+            if (valueProviderContainer.AdditionalTexts.LastOrDefault() is null)
             {
                 return;
             }
 
-            var filePath = source.Right.Right.LastOrDefault()!.Path;
+            var options = valueProviderContainer.AnalyzerConfigOptionsProvider.GetOptions(valueProviderContainer.AdditionalTexts.LastOrDefault()!);
 
-            var culture = GetCultureNameFromResxFilePath(Path.GetFileNameWithoutExtension(filePath));
+            var additionalFileConfigInfo =
+                AdditionalFileInfoFactory.Create(options, valueProviderContainer.AdditionalTexts.LastOrDefault()!);
 
-            var analyzerConfigOptionsProvider = source.Left;
-
-            var options = analyzerConfigOptionsProvider.GetOptions(source.Right.Right.LastOrDefault()!);
-
-
-            var generateSharedClassResult = options.TryGetValue("build_metadata.EmbeddedResource.GenerateSharedClass",
-                out string? generateSharedClass);
-            if (generateSharedClassResult && bool.TryParse(generateSharedClass, out var generateSharedClassBool) &&
-                generateSharedClassBool)
+            if (additionalFileConfigInfo is { GenerateSharedClass: true, Culture: null })
             {
-                if (culture == null)
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(additionalFileConfigInfo.FilePath);
+                var generatedFileName = fileNameWithoutExtension + ".g.cs";
+
+                var className = additionalFileConfigInfo.ClassName;
+                var namespaceValue = additionalFileConfigInfo.Namespace;
+
+                if (string.IsNullOrWhiteSpace(className))
                 {
-                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
-                    var generatedFileName = fileNameWithoutExtension + ".g.cs";
+                    className = fileNameWithoutExtension;
+                }
 
-                    var classNameResult =
-                        options.TryGetValue("build_metadata.EmbeddedResource.ClassName", out var className);
-                    var namespaceValueResult = options.TryGetValue("build_metadata.EmbeddedResource.NamespaceValue",
-                        out var namespaceValue);
+                if (string.IsNullOrWhiteSpace(namespaceValue))
+                {
+                    var mainSyntaxTree = valueProviderContainer.Compilation.SyntaxTrees.First(x => x.HasCompilationUnitRoot);
 
-                    if (classNameResult == false)
+                    var rootDirectory = Path.GetDirectoryName(mainSyntaxTree.FilePath);
+                    var resxDirectory = Path.GetDirectoryName(additionalFileConfigInfo.FilePath);
+
+                    if (string.IsNullOrWhiteSpace(rootDirectory) == false && string.IsNullOrWhiteSpace(resxDirectory) == false)
                     {
-                        className = fileNameWithoutExtension;
-                    }
+                        var relativePath = rootDirectory.Replace(resxDirectory!, string.Empty);
 
-                    if (namespaceValueResult == false)
-                    {
-                        var mainSyntaxTree = source.Right.Left.SyntaxTrees.First(x => x.HasCompilationUnitRoot);
-
-                        var rootDirectory = Path.GetDirectoryName(mainSyntaxTree.FilePath);
-                        var resxDirectory = Path.GetDirectoryName(filePath);
-
-                        if (string.IsNullOrWhiteSpace(rootDirectory) == false && string.IsNullOrWhiteSpace(resxDirectory))
+                        if (relativePath is not { })
                         {
-                            var relativePath = rootDirectory.Replace(resxDirectory!, string.Empty);
-
-                            if (relativePath is not { })
-                            {
-                                namespaceValue = PathToNamespace(relativePath!);
-                            }
+                            namespaceValue = PathToNamespace(relativePath!);
                         }
-                        else
-                        {
-
-                        }
-
-                    }
-                    else
-                    {
-                        // ReportNamespaceError(sourceProductionContext, filePath);
-                    }
-
-                    var generatedSharedSource = ResourceManagerClassGenerator.GenerateSource(namespaceValue!, className!, filePath);
-
-                    try
-                    {
-                        sourceProductionContext.AddSource(generatedFileName, generatedSharedSource);
-                    }
-                    catch (Exception ex)
-                    {
-
                     }
                 }
+
+                var generatedSharedSource = ResourceManagerClassGenerator.GenerateSource(namespaceValue!, className!, additionalFileConfigInfo.FilePath);
+
+                sourceProductionContext.AddSource(generatedFileName, generatedSharedSource);
             }
 
-            var generateForAndroidResult =
-                options.TryGetValue("build_metadata.EmbeddedResource.GenerateAndroidStrings",
-                    out var generateForAndroid);
-
-            if (generateForAndroidResult && bool.TryParse(generateForAndroid, out bool generateForAndroidBool) &&
-                generateForAndroidBool)
+            if (additionalFileConfigInfo.GenerateAndroidStrings)
             {
-                var androidResourcesPathResult = options.TryGetValue("build_metadata.EmbeddedResource.AndroidResourcesFolderPath",
-                    out var androidResourcesPath);
-
-                if (androidResourcesPathResult && string.IsNullOrWhiteSpace(androidResourcesPath) == false)
+                if (string.IsNullOrWhiteSpace(additionalFileConfigInfo.AndroidResourcesPath) == false)
                 {
                     var valuesFolder = "values";
 
-                    if (culture != null)
+                    if (additionalFileConfigInfo.Culture != null)
                     {
-                        valuesFolder += $"-{culture}";
+                        valuesFolder += $"-{additionalFileConfigInfo.Culture}";
                     }
 
-                    var stringsPath = Path.Combine(androidResourcesPath, valuesFolder, "strings.xml");
+                    var stringsPath = Path.Combine(additionalFileConfigInfo.AndroidResourcesPath!, valuesFolder,
+                        "strings.xml");
 
-                    AndroidStringsGenerator.GenerateAndroidStrings(filePath, stringsPath);
+                    AndroidStringsGenerator.GenerateAndroidStrings(additionalFileConfigInfo.FilePath, stringsPath);
+                }
+                else
+                {
+                    ReportAndroidResourcesDirectoryError(sourceProductionContext, additionalFileConfigInfo.FilePath);
                 }
             }
         });
-    }
-
-    private string? GetCultureNameFromResxFilePath(string resxFilePath)
-    {
-        var fileName = Path.GetFileNameWithoutExtension(resxFilePath);
-        var lastDotIndex = fileName.LastIndexOf('.');
-        if (lastDotIndex == -1)
-        {
-            return null;
-        }
-
-        var cultureName = fileName.Substring(lastDotIndex + 1);
-        if (cultureName.Length == 2)
-        {
-            return cultureName;
-        }
-
-        return cultureName.Contains('-') ? cultureName : null;
     }
 
     private void ReportNamespaceError(SourceProductionContext context, string fileName)
@@ -154,6 +106,22 @@ public class ResxSourceGenerator : IIncrementalGenerator
                 "LG001",
                 "Expected NamespaceValue for resx file",
                 $"Please, set NamespaceValue property in csproj for your resx file: {fileName}",
+                "CodeGeneration",
+                DiagnosticSeverity.Error,
+                true),
+            null,
+            DiagnosticSeverity.Error);
+
+        context.ReportDiagnostic(diagnostic);
+    }
+
+    private void ReportAndroidResourcesDirectoryError(SourceProductionContext context, string fileName)
+    {
+        var diagnostic = Diagnostic.Create(
+            new DiagnosticDescriptor(
+                "LG002",
+                "Expected AndroidResourcesFolderPath for resx file",
+                $"You have enabled generation strings.xml for Android. Please, set AndroidResourcesFolderPath property in csproj for your resx file: {fileName}",
                 "CodeGeneration",
                 DiagnosticSeverity.Error,
                 true),
