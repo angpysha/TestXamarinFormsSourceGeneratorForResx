@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+	</PropertyGroup>
+
+	<Import Project="D:\proj\Test.Generators\build\Test.Generators.props" />
+
+	<ItemGroup>
+		<PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
+		<PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Test.Generators\Test.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="True" />
+	</ItemGroup>
+
+	<!-- <PropertyGroup> -->
+	<!-- 	<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules> -->
+	<!-- </PropertyGroup> -->
+
+	<!-- <ItemGroup> -->
+	<!-- 	<Compile Update="FileResources.Designer.cs"> -->
+	<!-- 		<DesignTime>True</DesignTime> -->
+	<!-- 		<AutoGen>True</AutoGen> -->
+	<!-- 		<DependentUpon>FileResources.resx</DependentUpon> -->
+	<!-- 	</Compile> -->
+	<!-- </ItemGroup> -->
+
+	<ItemGroup>
+		<EmbeddedResource Update="FileResources.resx">
+			<NamespaceValue>TestXamarinFormsSourceGeneratorForResx</NamespaceValue>
+			<ClassName>FileResourcex</ClassName>
+			<GenerateSharedClass>True</GenerateSharedClass>
+			<GenerateAndroidStrings>True</GenerateAndroidStrings>
+			<AndroidResourcesFolderPath>$(ProjectDir)/../TestXamarinFormsSourceGeneratorForResx.Android/Resources</AndroidResourcesFolderPath>
+			<!-- <Generator>ResXFileCodeGenerator</Generator> -->
+			<!-- <LastGenOutput>FileResources.Designer.cs</LastGenOutput> -->
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<AdditionalFileItemNames>$(AdditionalFileItemNames);EmbeddedResource</AdditionalFileItemNames>
+	</PropertyGroup>
+</Project>
