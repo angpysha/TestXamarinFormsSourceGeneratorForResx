@@ -198,4 +198,10 @@
   <data name="TestStringForSome" xml:space="preserve">
     <value>Another string value</value>
   </data>
+  <data name="TestStringForSome2345" xml:space="preserve">
+    <value>Another string value</value>
+  </data>
+  <data name="TestStringForSome0999999" xml:space="preserve">
+    <value>Another string value one more</value>
+  </data>
 </root>

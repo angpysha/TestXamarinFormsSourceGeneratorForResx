@@ -6,7 +6,7 @@
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 	</PropertyGroup>
 
-	<Import Project="D:\proj\Test.Generators\build\Test.Generators.props" />
+	<Import Project="..\..\Test.Generators\build\Test.Generators.props" />
 
 	<ItemGroup>
 		<PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Test.Generators\Test.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="True" />
+		<ProjectReference Include="..\..\Test.Generators\Test.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="False" />
 	</ItemGroup>
 
 	<!-- <PropertyGroup> -->
